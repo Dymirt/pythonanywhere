@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'books',
     'django_filters',
     'django_tables2',
-    'bootstrap5',
 
     # Other
     'django.contrib.admin',
