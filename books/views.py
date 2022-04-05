@@ -1,16 +1,16 @@
 from django.shortcuts import render
 from .filters import BookFilter
 from django.views.generic import ListView
+from django_tables2 import SingleTableMixin
 from .models import Book
+from .tables import BookTable
+from django_filters.views import FilterView
 
 # Create your views here.
 
 
-class BookListView(ListView):
+class BookListView(SingleTableMixin, FilterView):
     model = Book
     template_name = "books/index.html"
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = BookFilter(self.request.GET,  queryset=self.get_queryset())
-        return context
+    table_class = BookTable
+    filterset_class = BookFilter
