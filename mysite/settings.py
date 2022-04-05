@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['Dymirt.pythonanywhere.com',
 # Application definition
 
 INSTALLED_APPS = [
+    'books',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
