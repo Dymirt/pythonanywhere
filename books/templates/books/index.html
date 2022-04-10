@@ -6,14 +6,35 @@
 
 
 {% block body %}
-<form method="GET">
-    {{ filter.form }}
-    <input type=submit value="Filter">
-</form>
+
+<style>
+    form label, #id_author, input{
+        width: 100%;
+    }
+    .date_range {
+        width: 47%;
+    }
+    .img-thumbnail{
+        width: 50px;
+    }
+    .filter {
+    margin: .5rem;
+    margin-top: 2.5rem;
+    padding: .2rem;
+    border: solid black 2px;
+    height: max-content;
+    }
+</style>
 
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        {% render_table table %}
+    <div class='row'>
+        <div class="col-2 filter">
+            <form method="GET">
+                {{ filter.form.as_p }}
+                <input type=submit value="Filter">
+            </form>
+        </div>
+        <div class="col">{% render_table table %}</div>
     </div>
 </div>
 {% endblock %}

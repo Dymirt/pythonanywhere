@@ -4,12 +4,14 @@ from .models import Book
 
 
 class BookFilter(django_filters.FilterSet):
-    published_date = django_filters.DateFromToRangeFilter(widget=RangeWidget(attrs={'type': 'date'}))
+    published_date = django_filters.DateFromToRangeFilter(widget=RangeWidget(attrs={'type': 'date',
+                                                                                    'class': 'date_range'
+                                                                                    }))
 
     class Meta:
         model = Book
         fields = {
             'title': ['contains'],
-            'author': ['exact'],
-            'language': ['contains']
+            'author': ['contains'],
+            'language': ['exact']
         }

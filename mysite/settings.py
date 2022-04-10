@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'books',
     'django_filters',
     'django_tables2',
+    'isbn_field',
 
     # Other
     'django.contrib.admin',
@@ -140,3 +141,5 @@ MEDIA_ROOT = '/home/Dymirt/mysite/media'
 MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/Dymirt/mysite/static'
 STATIC_URL = '/static/'
+
+DATE_INPUT_FORMATS = ['%d-%m-%Y', '%Y-%m']

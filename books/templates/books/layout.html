@@ -12,6 +12,22 @@
 
 </head>
 <body>
-{% block body%} {% endblock %}
+    <header class='container-fluid'>
+        <div class='row align-items-center'>
+            <div class='col-2'><h1>Books</h1></div>
+            <ul class="nav col">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Book List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add_book' %}">Add book</a>
+                </li>
+        </ul>
+        </div>
+    </header>
+<main>
+    {% block body%} {% endblock %}
+</main>
+
 </body>
 </html>
