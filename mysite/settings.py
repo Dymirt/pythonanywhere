@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django_tables2',
     'isbn_field',
 
+    # Ecommerce
+    'auctions',
+
     # Other
     'django.contrib.admin',
     'django.contrib.auth',
@@ -143,3 +146,5 @@ STATIC_ROOT = '/home/Dymirt/mysite/static'
 STATIC_URL = '/static/'
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y', '%Y-%m']
+
+AUTH_USER_MODEL = "auctions.User"

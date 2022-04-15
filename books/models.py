@@ -10,7 +10,7 @@ class Book(models.Model):
     published_date = models.DateField(blank=False)
     isbn = ISBNField()
     page_count = models.IntegerField(blank=False)
-    imageLinks = models.URLField()
+    imageLinks = models.URLField(blank=True)
     language = models.CharField(max_length=2)
 
     def __str__(self):
