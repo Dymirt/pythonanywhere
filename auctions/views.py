@@ -2,9 +2,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from .models import User, Listing, Category, Comment
+from .models import User, Listing, Category
 from .forms import ListingForm, BidForm, CommentForm
 from django.views.generic.list import ListView
 
@@ -12,7 +12,7 @@ from django.views.generic.list import ListView
 class ListingListView(ListView):
     model = Listing
     paginate_by = 10
-    template_name = "auctions/listings.html"
+    template_name = "auctions/listing/list.html"
     title = "Listings"
 
     def get_context_data(self, **kwargs):
@@ -32,7 +32,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("auctions:index"))
         else:
             return render(request, "auctions/login.html", {
                 "message": "Invalid username and/or password."
@@ -43,7 +43,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("auctions:index"))
 
 
 def register(request):
@@ -68,7 +68,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("auctions:index"))
     else:
         return render(request, "auctions/register.html")
 
@@ -76,20 +76,19 @@ def register(request):
 @login_required
 def add_auction(request):
     if request.method == "GET":
-        Listing_form = ListingForm(initial={'user': request.user})
-
+        form = ListingForm(initial={'user': request.user})
     else:
-        Listing_form = ListingForm(request.POST)
-        if Listing_form.is_valid():
-            listing = Listing_form.save()
-            return HttpResponseRedirect(reverse('listing', kwargs={'listing_id': listing.pk}))
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            listing = form.save()
+            return HttpResponseRedirect(reverse('auctions:listing', kwargs={'listing_id': listing.pk}))
 
-    return render(request, "auctions/add_listing.html", {'form': Listing_form})
+    return render(request, "auctions/add_listing.html", {'form': form})
 
 
-def listing(request, listing_id):
+def listing_detail(request, listing_id):
 
-    listing = Listing.objects.get(pk=listing_id)
+    listing = get_object_or_404(Listing, pk=listing_id)
 
     # Bid form initialization
     bid_form = BidForm(initial={'user': request.user.id, 'listing': listing})
@@ -99,7 +98,7 @@ def listing(request, listing_id):
     else:
         min_bid = float(listing.starting_bid)
 
-    bid_form.fields['bid'].widget.attrs['min'] = min_bid
+    bid_form.fields['bid'].widget.attrs['min'] = format(min_bid, '.2f')
 
     # Comment form initialization
     comment_form = CommentForm(initial={'user': request.user.id, 'listing': listing})
@@ -114,12 +113,11 @@ def listing(request, listing_id):
         form = BidForm(request.POST)
         if form.is_valid():
             bid = form.save(commit=False)
-            bid.bid = float(bid.bid)
-            if bid.bid >= min_bid:
+            if float(bid.bid) >= min_bid:
                 bid.save()
-        return HttpResponseRedirect(reverse('listing', kwargs={'listing_id': listing_id}))
+        return HttpResponseRedirect(reverse('auctions:listing', kwargs={'listing_id': listing_id}))
     else:
-        return render(request, "auctions/listing_detail.html", context)
+        return render(request, "auctions/listing/detail.html", context)
 
 
 @login_required
@@ -128,7 +126,7 @@ def comment(request):
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             comment_form.save()
-        return HttpResponseRedirect(reverse('listing', kwargs={'listing_id': request.POST['listing']}))
+        return HttpResponseRedirect(reverse('auctions:listing', kwargs={'listing_id': request.POST['listing']}))
 
 
 class WishlistListView(ListingListView):
@@ -138,12 +136,12 @@ class WishlistListView(ListingListView):
         return self.request.user.wishlist.all()
 
     def post(self, request):
-        listing = self.model.objects.get(pk=request.POST['listing_id'])
+        listing = get_object_or_404(self.model, pk=request.POST['listing_id'])
         if listing not in request.user.wishlist.all():
             request.user.wishlist.add(listing)
         else:
             request.user.wishlist.remove(listing)
-        return HttpResponseRedirect(reverse('listing', kwargs={'listing_id': request.POST['listing_id']}))
+        return HttpResponseRedirect(reverse('auctions:listing', kwargs={'listing_id': request.POST['listing_id']}))
 
 
 def categories(request):
@@ -160,7 +158,7 @@ class CategoryListingListView(ListingListView):
         return context
 
     def get_queryset(self):
-        category = self.model.objects.get(title=self.kwargs['category'])
+        category = get_object_or_404(self.model, title=self.kwargs['category'])
         return category.listings.all()
 
 
@@ -173,9 +171,7 @@ class UserListingListView(ListingListView):
 
 @login_required
 def close_listing(request, listing_id):
-    listing = Listing.objects.get(pk=listing_id)
-
+    listing = get_object_or_404(Listing, pk=listing_id)
     if request.method == "POST" and request.user == listing.user:
-        listing.is_active = False
-        listing.save()
-        return HttpResponseRedirect(reverse('listing', kwargs={'listing_id': listing_id}))
+        listing.close()
+    return HttpResponseRedirect(reverse('auctions:listing', kwargs={'listing_id': listing_id}))

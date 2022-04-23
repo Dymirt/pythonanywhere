@@ -1,5 +1,5 @@
 {% for listing in object_list %}
-<a href="{% url 'listing' listing.id %}" style="text-decoration: none; color: inherit">
+<a href="{{ listing.get_absolute_url }}" style="text-decoration: none; color: inherit">
     <div class='row listing align-items-center'>
             <div class="col-3" style="height:inherit; padding: 0">
                 <img src='{{ listing.image_url }}'>
@@ -12,12 +12,12 @@
                 </div>
                 <div class='row'>
                     <div class="col">
-                        <p class='description'>{{ listing.description }}</p>
+                        <p class='description'>{{ listing.description|truncatewords:20}}</p>
                     </div>
                 </div>
                 <div class='row'>
-                    <div class="col">
-                        <p>Seller: {{ listing.user }}</p>
+                    <div class='col date'>
+                        <time  datetime="{{ listing.date }}">Created {{ listing.date }} by {{ listing.user }}</time>
                     </div>
                 </div>
             </div>
@@ -35,18 +35,13 @@
                     <div class='col'>
                         {% if listing.is_active %}
                             {% if listing.bids.all %}
-                                <p class="bid listing_label">{{ listing.bids.count }} bid(s) so far.</p>
+                                <p class="bid listing_label">{{ listing.bids.count }} bid{{ listing.bids.count|pluralize }} so far.</p>
                             {% else %}
                                 <p class="no_bid listing_label">No bids yet</p>
                             {% endif %}
                         {% else %}
                             <p class="sold listing_label">Sold</p>
                         {% endif %}
-                    </div>
-                </div>
-                <div class='row'>
-                    <div class='col date'>
-                        <time  datetime="{{ listing.date }}">Created {{ listing.date }}</time>
                     </div>
                 </div>
             </div>

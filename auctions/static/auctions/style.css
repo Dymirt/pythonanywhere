@@ -10,7 +10,7 @@ height: -webkit-fill-available;
 object-fit:cover
 }
 
-.listing .description {
+listing .description {
 overflow: hidden;
 text-overflow: ellipsis;
 display: -webkit-box;
@@ -56,7 +56,6 @@ font-weight: bold;
 
 .date {
 font-size: small;
-text-align: right;
 }
 
 .comment .text {

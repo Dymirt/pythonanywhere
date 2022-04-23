@@ -42,7 +42,7 @@
                 <div class='row justify-content-start'>
                     <div class='col-auto bid_info'>
                         {% if listing.bids.all %}
-                            <p>{{ listing.bids.count }} bid(s) so far.</p>
+                            <p>{{ listing.bids.count }} bid{{ listing.bids.count|pluralize }}.</p>
                         {% endif %}
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                 <div class='row'>
                     <div class='col'>
                         {% if listing.user == user and listing.is_active %}
-                            <form action="{% url 'closelisting' listing.id %}" method=post>
+                            <form action="{% url 'auctions:closelisting' listing.id %}" method=post>
                                 {% csrf_token %}
                                 <input type=submit value='Close auction'>
                             </form>
@@ -68,7 +68,7 @@
                 <div class='row '>
                     <div class='col bid_form'>
                         {% if listing.is_active and listing.user != user and listing.highest_bid.user != user %}
-                            <form action="{% url 'listing' listing.id %}" method='post'>
+                            <form action="{% url 'auctions:listing' listing.id %}" method='post'>
                                 {% csrf_token %}
                                 {{ bid_form }}
                                 <input type=submit value="Place Bid">
@@ -99,6 +99,11 @@
                         <p>{{ listing.description }}</p>
                     </div>
                 </div>
+                <div class='row'>
+                    <div class='col date'>
+                        <time  datetime="{{ listing.date }}">Created {{ listing.date }} by {{ listing.user }}</time>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -108,7 +113,7 @@
                 <table>
                     <tr>
                         <td>Category:</td>
-                        <td><a href= "{% url 'category' listing.category %}">{{ listing.category }}</a></td>
+                        <td><a href= "{{ listing.category.get_absolute_url }}">{{ listing.category }}</a></td>
                     </tr>
                     <tr>
                         <td>Listing id:</td>
@@ -122,5 +127,5 @@
             </div>
         </div>
     </div>
-    {% include 'auctions/partials/comments.html' %}
+    {% include 'auctions/listing/partials/comments.html' %}
 {% endblock %}
