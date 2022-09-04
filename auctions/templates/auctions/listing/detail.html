@@ -1,7 +1,6 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class='container'>
     <div class="row justify-content-center">
             {% if not listing.is_active %}
                 <div class='col-auto listing_label sold' style='margin: 1rem 0'>
@@ -18,7 +17,7 @@
                 </div>
             {% endif %}
         </div>
-</div>
+
     <div class='container listing detail'>
         <div class='row '>
             <div class='col' style="height:inherit; padding: 0">
