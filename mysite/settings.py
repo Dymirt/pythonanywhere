@@ -34,13 +34,6 @@ ALLOWED_HOSTS = ['Dymirt.pythonanywhere.com',
 # Application definition
 
 INSTALLED_APPS = [
-
-    # Books app
-    'books',
-    'django_filters',
-    'django_tables2',
-    'isbn_field',
-
     # Ecommerce
     'auctions',
 

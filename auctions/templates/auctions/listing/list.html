@@ -4,6 +4,9 @@
     <div class='container'>
         <h2>{{ title }}</h2>
         {% include 'auctions/listing/partials/listing.html' %}
-        {% include 'auctions/listing/partials/pagination.html' %}
+
+        {% if page_obj and page_obj.has_next %}
+            {% include 'auctions/listing/partials/pagination.html' %}
+        {% endif %}
     </div>
 {% endblock %}

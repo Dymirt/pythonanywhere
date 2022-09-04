@@ -1,5 +1,5 @@
 <div class='comments container'>
-    <h6>{{ listing.comments.count }} Comments</h6>
+    <h6>{{ listing.comments.count }} Comment{{ listing.comments.count|pluralize }}</h6>
     {% for comment in listing.comments.all %}
         <div class='container comment'>
             <div class="row ">
@@ -18,6 +18,8 @@
                 </div>
             </div>
         </div>
+    {% empty %}
+        <p>There are no comments yet.</p>
     {% endfor %}
 
     {% if user.is_authenticated %}
