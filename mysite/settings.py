@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     # Ecommerce
     'auctions',
 
+    # Resume page
+    'resume',
+
     # Other
     'django.contrib.admin',
     'django.contrib.auth',
