@@ -419,19 +419,11 @@
                     
                     
                     <!-- CONTACT FORM -->
-                    {% if messages %}
-                      {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                      {% endfor %}
-                    {% endif %}
-                        <div id="notify">
-
-                        </div>
+                    <div id="notify"></div>
                     <form id="contact-form" method="post">
                         {% csrf_token %}
                         {{ form }}
                         <button type="submit" class="form-control scroll-animated-from-right">Send Mail</button>
-                        <div class="success-message">* The Email was Sent Successfully!</div>
                     </form>
 
                     <!-- /CONTACT FORM -->
@@ -443,7 +435,6 @@
                 <section id="footer">
                     <!-- SOCIAL ICONS -->
                     <ul class="social-icons scroll-animated-from-right">
-                        <li><a href="https://www.facebook.com/Dymitrkolida/"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                         <li><a href="https://github.com/Dymirt"><i class="fa fa-github" aria-hidden="true"></i></a></li>
                         <li><a href="https://www.linkedin.com/in/dmytro-kolida/"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
                     </ul>
