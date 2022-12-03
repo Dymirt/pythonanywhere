@@ -14,7 +14,6 @@ function handleSubmit(postForm) {
                 postForm.reset();
                 document.querySelector("#notify").innerHTML = `<div class="alert alert-success alert-dismissible show" role="alert">
                                                                   <strong>Success!</strong> Thank you <strong>${data.name}</strong> for your message.
-                                                                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                                 </div> `
             })
             .catch((error) => {
