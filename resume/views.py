@@ -1,11 +1,9 @@
 from django.forms import model_to_dict
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-
 from .forms import MessageFrom
-from django.contrib import messages
 from django.http import JsonResponse
-import json
+from django.core.mail import send_mail
+import os
 # Create your views here.
 
 
@@ -19,6 +17,13 @@ def send_message(request):
         form = MessageFrom(request.POST or None)
         if form.is_valid():
             instance = form.save(commit=False)
+            send_mail(
+                f'New message on personal website',
+                f'{instance.email} \n {instance.message} \n {instance.name}',
+                '',
+                [os.getenv("EMAIL_HOST_USER")],
+                fail_silently=False,
+            )
             instance.save()
             # converts Post instance to dictionary so JsonResponse can serialize it to Json
             return JsonResponse(
