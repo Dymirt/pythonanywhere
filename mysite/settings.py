@@ -34,9 +34,6 @@ ALLOWED_HOSTS = ['Dymirt.pythonanywhere.com',
 # Application definition
 
 INSTALLED_APPS = [
-    # Ecommerce
-    'auctions',
-
     # Resume page
     'resume',
 
@@ -142,8 +139,6 @@ STATIC_ROOT = '/home/Dymirt/mysite/static'
 STATIC_URL = '/static/'
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y', '%Y-%m']
-
-AUTH_USER_MODEL = "auctions.User"
 
 # Email
 EMAIL_HOST = os.getenv("EMAIL_HOST")
