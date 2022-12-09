@@ -36,6 +36,8 @@ ALLOWED_HOSTS = ['Dymirt.pythonanywhere.com',
 INSTALLED_APPS = [
     # Resume page
     'resume',
+    # Media calculator
+    'counters',
 
     # Other
     'django.contrib.admin',
