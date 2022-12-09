@@ -7,7 +7,10 @@
 	<thead>
 		<tr>
 			<th>Title</th>
-			<th>actions</th>
+			<th>Price per unit</th>
+			<th>Unit</th>
+			<th>Monthly payment</th>
+			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -15,6 +18,23 @@
 		<tr>
 			<td>
 				{{obj.title}}
+			</td>
+
+			<td>
+				{% if obj.price_per_unit %}
+					{{obj.price_per_unit}} zł
+				{% endif %}
+			</td>
+			<td>
+				{% if obj.unit %}
+				{{obj.unit}}
+				{% endif %}
+			</td>
+
+			<td>
+				{% if obj.fixed_price %}
+					{{obj.fixed_price}} zł
+				{% endif %}
 			</td>
 
 			<td>
