@@ -1,48 +1,6 @@
 {% extends "counters/base.html" %}
 
 {% block content %}
-<a href="{% url 'counters:counter-create' %}">add</a>
-
-<table border="1">
-	<thead>
-		<tr>
-			<th>Title</th>
-			<th>Price per unit</th>
-			<th>Unit</th>
-			<th>Monthly payment</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for obj in object_list %}
-		<tr>
-			<td>
-				{{obj.title}}
-			</td>
-
-			<td>
-				{% if obj.price_per_unit %}
-					{{obj.price_per_unit}} zł
-				{% endif %}
-			</td>
-			<td>
-				{% if obj.unit %}
-				{{obj.unit}}
-				{% endif %}
-			</td>
-
-			<td>
-				{% if obj.fixed_price %}
-					{{obj.fixed_price}} zł
-				{% endif %}
-			</td>
-
-			<td>
-				<a href="{% url 'counters:counter-edit' obj.id %}">edit</a>
-				<a href="{% url 'counters:counter-delete' obj.id %}">delete</a>
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+<a href="{% url 'counters:counter-create' %}" class='button'>add</a>
+{% include 'counters/partials/counters_table.html' %}
 {% endblock %}

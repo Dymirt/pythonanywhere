@@ -2,35 +2,5 @@
 
 {% block content %}
 <a href="{% url 'counters:reading-create' %}">add</a>
-
-<table border="1">
-	<thead>
-		<tr>
-			<th>Title</th>
-			<th>Value</th>
-			<th>Date</th>
-			<th>actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for obj in object_list %}
-		<tr>
-			<td>
-				{{obj.counter.title}}
-			</td>
-			<td>
-				{{obj.value}}
-			</td>
-			<td>
-				{{obj.date}}
-			</td>
-
-			<td>
-				<a href="{% url 'counters:reading-edit' obj.id %}">edit</a>
-				<a href="{% url 'counters:reading-delete' obj.id %}">delete</a>
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+{% include 'counters/partials/readings_table.html' %}
 {% endblock %}

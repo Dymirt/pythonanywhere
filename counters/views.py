@@ -3,6 +3,7 @@ from .models import Counter, Reading
 
 # Create your views here.
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 
 class CounterListView(ListView):
@@ -11,3 +12,7 @@ class CounterListView(ListView):
 
 class ReadingListView(ListView):
     model = Reading
+
+
+class CounterDetailView(DetailView):
+    model = Counter

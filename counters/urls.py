@@ -2,7 +2,7 @@ from django.urls import path, reverse_lazy
 from django.views.generic import UpdateView, CreateView, DeleteView
 from .models import Counter, Reading
 
-from .views import CounterListView, ReadingListView
+from .views import CounterListView, ReadingListView, CounterDetailView
 
 app_name = 'counters'
 
@@ -32,6 +32,9 @@ urlpatterns = [
              template_name='counters/generic_delete.html'
          ),
          name='counter-delete'),
+
+    path('counter/<int:pk>/detail/', CounterDetailView.as_view(), name='counter-detail'),
+
     # Reading urls
     path('readings/list/', ReadingListView.as_view(), name='readings-list'),
     path('reading/create/',
