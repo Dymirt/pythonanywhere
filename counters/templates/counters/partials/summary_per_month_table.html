@@ -1,0 +1,24 @@
+<table border="1">
+    <caption><strong>{{ object.title }}</strong><br> summary per month</caption>
+    <thead>
+		<tr>
+			<th>Month</th>
+			<th>Consumption</th>
+			<th>Payment</th>
+
+		</tr>
+	</thead>
+      <tr>
+        {% for month, total, s in summary %}
+        <tr>
+            <td>{{month|date:'M-Y'}}:</td>
+            {% if total %}
+            <td>{{total|floatformat:2}} {{ object.unit }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            <td>{{ s|floatformat:2 }} zł</td>
+        </tr>
+        {% endfor %}
+      </tr>
+</table>
