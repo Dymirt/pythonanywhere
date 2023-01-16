@@ -145,11 +145,15 @@ def typography_view(request):
 
 @login_required
 def projects_view(request):
+
     context = {
         "status_choices": STATUS_CHOICES,
         "priority_choices": PRIORITY_CHOICES,
-        "organization": request.user.member.organization,
     }
+
+    if request.user.member.organization:
+        context["organization"] = request.user.member.organization
+
     return render(request, "tasks/pages/projects.html", context=context)
 
 
