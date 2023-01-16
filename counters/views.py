@@ -18,7 +18,7 @@ class CounterDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['summary'] = summary_per_month(self.object.readings.all())
+        context["summary"] = summary_per_month(self.object.readings.all())
         return context
 
 
@@ -29,15 +29,22 @@ def update_usage(request):
         latest = readings[0]
         previous = readings[1]
         latest.usage_in_units = latest.value - previous.value
-        latest.save(update_fields=['usage_in_units'])
+        latest.save(update_fields=["usage_in_units"])
 
 
 class IndexView(ListView):
     model = Counter
-    template_name = 'counters/index.html'
+    template_name = "counters/index.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['summary_per_month'] = {obj: summary_per_month(obj.readings.all()) for obj in self.object_list}
-        context['total'] = sum([context['summary_per_month'].get(i)[0][2] for i in context['summary_per_month']])
+        context["summary_per_month"] = {
+            obj: summary_per_month(obj.readings.all()) for obj in self.object_list
+        }
+        context["total"] = sum(
+            [
+                context["summary_per_month"].get(i)[0][2]
+                for i in context["summary_per_month"]
+            ]
+        )
         return context

@@ -22,7 +22,7 @@ PRIORITY_CHOICES = [
 
 
 class Member(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='member')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
     organization = models.ForeignKey(
         "Organization",
         on_delete=models.CASCADE,
@@ -44,7 +44,9 @@ class Project(models.Model):
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default=NOT_STARTED
     )
-    members = models.ManyToManyField("Member", related_name="project_members", blank=True)
+    members = models.ManyToManyField(
+        "Member", related_name="project_members", blank=True
+    )
     author = models.ForeignKey(
         "Member", on_delete=models.CASCADE, related_name="project_authored"
     )
@@ -107,12 +109,14 @@ class Milestone(models.Model):
             return 0
 
     class Meta:
-        ordering = ['deadline']
+        ordering = ["deadline"]
 
 
 class Task(models.Model):
     title = models.CharField(max_length=64)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=NOT_STARTED)
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default=NOT_STARTED
+    )
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default=LOW)
 
     class Meta:
@@ -128,7 +132,9 @@ class MilestoneTask(models.Model):
 
 
 class DayTask(Task):
-    user = models.ForeignKey("Member", on_delete=models.CASCADE, related_name="day_tasks")
+    user = models.ForeignKey(
+        "Member", on_delete=models.CASCADE, related_name="day_tasks"
+    )
     parent = models.ForeignKey(
         "DayTask",
         on_delete=models.CASCADE,

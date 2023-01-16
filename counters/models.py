@@ -16,12 +16,16 @@ class Counter(models.Model):
 
 class Reading(models.Model):
     class Meta:
-        ordering = ('-date',)
+        ordering = ("-date",)
 
-    counter = models.ForeignKey('Counter', related_name='readings', on_delete=models.CASCADE)
+    counter = models.ForeignKey(
+        "Counter", related_name="readings", on_delete=models.CASCADE
+    )
     date = models.DateField()
     value = models.DecimalField(max_digits=10, decimal_places=2)
-    usage_in_units = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    usage_in_units = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True
+    )
 
     def __str__(self):
-        return f'{self.counter.title} {self.value} on {self.date}'
+        return f"{self.counter.title} {self.value} on {self.date}"

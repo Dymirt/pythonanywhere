@@ -1,30 +1,25 @@
 <table border="1">
-	<thead>
-		<tr>
-			<th>Title</th>
-			<th>Value</th>
-			<th>Date</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for obj in object_list %}
-		<tr>
-			<td>
-				<a href="{% url 'counters:counter-detail' obj.counter.id %}">{{obj.counter.title}}</a>
-			</td>
-			<td>
-				{{obj.value}}
-			</td>
-			<td>
-				{{obj.date}}
-			</td>
-
-			<td>
-				<a href="{% url 'counters:reading-edit' obj.id %}">edit</a>
-				<a href="{% url 'counters:reading-delete' obj.id %}">delete</a>
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in object_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'counters:counter-detail' obj.counter.id %}">{{ obj.counter.title }}</a>
+                </td>
+                <td>{{ obj.value }}</td>
+                <td>{{ obj.date }}</td>
+                <td>
+                    <a href="{% url 'counters:reading-edit' obj.id %}">edit</a>
+                    <a href="{% url 'counters:reading-delete' obj.id %}">delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>

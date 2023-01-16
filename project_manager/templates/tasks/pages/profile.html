@@ -75,7 +75,8 @@
                                 <h6 class="text-uppercase text-body text-xs font-weight-bolder">Organization</h6>
                                 {% if user == profile_user %}
                                     {% if not user.member.organization %}
-                                        <form action="{% url 'project_manager:profile' user.username %}" method=post>
+                                        <form action="{% url 'project_manager:profile' user.username %}"
+                                              method="post">
                                             {% if organization_form_message %}
                                                 <p class="mt-4 text-sm text-center font-weight-bold text-primary text-gradient">
                                                     {{

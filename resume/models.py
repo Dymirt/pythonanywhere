@@ -8,4 +8,4 @@ class Message(models.Model):
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'Message from  {self.name} on {self.date}'
+        return f"Message from  {self.name} on {self.date}"

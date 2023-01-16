@@ -1,9 +1,25 @@
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed, Http404, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import (
+    HttpResponseRedirect,
+    HttpResponse,
+    HttpResponseNotAllowed,
+    Http404,
+    HttpResponseForbidden,
+    HttpResponseBadRequest,
+)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Member,  Project, Milestone,MilestoneTask, Organization, STATUS_CHOICES, PRIORITY_CHOICES
+from .models import (
+    User,
+    Member,
+    Project,
+    Milestone,
+    MilestoneTask,
+    Organization,
+    STATUS_CHOICES,
+    PRIORITY_CHOICES,
+)
 from django.db import IntegrityError
 import json
 from .forms import OrganizationLoginForm
@@ -76,22 +92,26 @@ def profile_view(request, username):
 
     form = OrganizationLoginForm()
     context = {
-        'profile_user': profile_user,
+        "profile_user": profile_user,
         "form": form,
         "status_choices": STATUS_CHOICES,
         "priority_choices": PRIORITY_CHOICES,
     }
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = OrganizationLoginForm(request.POST)
         if form.is_valid():
             try:
-                organization = Organization.objects.get(login=form.cleaned_data.get('login'))
+                organization = Organization.objects.get(
+                    login=form.cleaned_data.get("login")
+                )
             except Organization.DoesNotExist:
-                context['organization_form_message'] = "Invalid username and/or password."
+                context[
+                    "organization_form_message"
+                ] = "Invalid username and/or password."
                 return render(request, "tasks/pages/profile.html", context=context)
 
-            if organization.password == form.cleaned_data.get('password'):
+            if organization.password == form.cleaned_data.get("password"):
                 member = request.user.member
                 member.organization = organization
                 member.save()
@@ -128,7 +148,7 @@ def projects_view(request):
     context = {
         "status_choices": STATUS_CHOICES,
         "priority_choices": PRIORITY_CHOICES,
-        'organization': request.user.member.organization
+        "organization": request.user.member.organization,
     }
     return render(request, "tasks/pages/projects.html", context=context)
 
@@ -149,15 +169,18 @@ def project_detail_view(request, project_id):
 
 def add_project_milestone(request, project_id):
     if request.method == "POST":
-        member = Member.objects.get(user=User.objects.get_by_natural_key(request.POST['assignment']))
-        milestone = Milestone.objects.create(title=request.POST['title'],
-                                        deadline=request.POST['deadline'],
-                                        status=request.POST['status'],
-                                        priority=request.POST['priority'],
-                                        project=Project.objects.get(pk=project_id),
-                                        assignment=member,
-                                        author=request.user.member
-                                        )
+        member = Member.objects.get(
+            user=User.objects.get_by_natural_key(request.POST["assignment"])
+        )
+        milestone = Milestone.objects.create(
+            title=request.POST["title"],
+            deadline=request.POST["deadline"],
+            status=request.POST["status"],
+            priority=request.POST["priority"],
+            project=Project.objects.get(pk=project_id),
+            assignment=member,
+            author=request.user.member,
+        )
         milestone.save()
 
     return HttpResponseRedirect(reverse("project", args=[project_id]))
@@ -196,9 +219,13 @@ def project_put_member(request, project_id):
     if request.user == project.author.user:
         if request.method == "PUT":
             data = json.loads(request.body)
-            member = Member.objects.get(user=User.objects.get_by_natural_key(data["member"]))
+            member = Member.objects.get(
+                user=User.objects.get_by_natural_key(data["member"])
+            )
             if member in project.members.all():
-                member_project_milestones = Milestone.objects.filter(project=project, assignment=member)
+                member_project_milestones = Milestone.objects.filter(
+                    project=project, assignment=member
+                )
                 for milestones in member_project_milestones:
                     milestones.assignment = None
                     milestones.save()
@@ -241,7 +268,9 @@ def milestone_put_assignment(request, milestone_id):
     if request.method == "PUT":
         data = json.loads(request.body)
         if data["assignment"] != "None":
-            member = Member.objects.get(user=User.objects.get_by_natural_key(data["assignment"]))
+            member = Member.objects.get(
+                user=User.objects.get_by_natural_key(data["assignment"])
+            )
             milestone.assignment = member
         else:
             milestone.assignment = None
@@ -262,6 +291,7 @@ def milestone_remove(request, milestone_id):
 # milestones PUT views
 #################
 
+
 def milestone_tasks(request, milestone_id):
     milestone = Milestone.objects.get(pk=milestone_id)
 
@@ -278,7 +308,9 @@ def milestone_tasks(request, milestone_id):
 def milestone_tasks_add(request, milestone_id):
     if request.method == "POST":
         milestone = Milestone.objects.get(pk=milestone_id)
-        task = MilestoneTask.objects.create(title=request.POST['title'], milestone=milestone)
+        task = MilestoneTask.objects.create(
+            title=request.POST["title"], milestone=milestone
+        )
         task.save()
 
     return HttpResponseRedirect(reverse("milestone_tasks", args=[milestone_id]))
