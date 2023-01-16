@@ -1,0 +1,6 @@
+{% extends "counters/base.html" %}
+
+{% block content %}
+<a href="{% url 'counters:reading-create' %}">add</a>
+{% include 'counters/partials/readings_table.html' %}
+{% endblock %}

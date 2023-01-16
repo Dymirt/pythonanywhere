@@ -1,0 +1,9 @@
+{% extends "counters/base.html" %}
+
+{% block content %}
+
+{% for object, summary in summary_per_month.items %}
+    {% include 'counters/partials/summary_per_month_table.html' %}
+{% endfor%}
+<p>Total: {{total|floatformat:2}} zł</p>
+{% endblock %}

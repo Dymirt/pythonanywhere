@@ -19,4 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("resume.urls", namespace='resume')),
+    path('', include("counters.urls", namespace='counters')),
+    path('project-manager/', include("project_manager.urls", namespace='project_manager')),
 ]
