@@ -1,0 +1,16 @@
+<div class="input-group input-group-outline my-3">
+    <select class="form-control select"
+            onchange='project_put_status({{ project.id }}, this.value)'>
+        {% for key, status in status_choices %}
+            {% if project.status == key %}
+                <option value="{{ key }}" selected>
+                    {{ status }}
+                </option>
+            {% else %}
+                <option value="{{ key }}">
+                    {{ status }}
+                </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>

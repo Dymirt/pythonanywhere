@@ -41,20 +41,20 @@ urlpatterns = [
     # Reading urls
     path('readings/list/', ReadingListView.as_view(), name='readings-list'),
     path('reading/create/',
-         login_required(CreateView.as_view(
+         CreateView.as_view(
              model=Reading,
              fields='__all__',
              success_url=reverse_lazy('counters:readings-list'),
              template_name='counters/generic_update.html'
-         )),
+         ),
          name='reading-create'),
     path('reading/<int:pk>/edit/',
-         login_required(UpdateView.as_view(
+         UpdateView.as_view(
              model=Reading,
              fields='__all__',
              success_url=reverse_lazy('counters:readings-list'),
              template_name='counters/generic_update.html'
-         )),
+         ),
          name='reading-edit'),
     path('reading/<int:pk>/delete/',
          login_required(DeleteView.as_view(
@@ -64,5 +64,5 @@ urlpatterns = [
          )),
          name='reading-delete'),
     # Update views
-    path('readings/update/usages', login_required(update_usage), name='update_readings_usages')
+    path('readings/update/usages', update_usage, name='update_readings_usages')
 ]
