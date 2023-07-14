@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import CreateView
+from counters.forms import ReadingForm
 
 from .models import Counter, Reading
 from .reports import summary_per_month
@@ -20,6 +23,12 @@ class CounterDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context["summary"] = summary_per_month(self.object.readings.all())
         return context
+
+
+class AddCounterReading(CreateView):
+    template_name = "counters/generic_update.html"
+    form_class = ReadingForm
+    success_url = reverse_lazy("counters:readings-list")
 
 
 def update_usage(request):
