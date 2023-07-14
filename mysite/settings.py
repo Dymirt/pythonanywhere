@@ -39,9 +39,6 @@ INSTALLED_APPS = [
     # Media calculator
     'counters',
 
-    # Project-manager
-    'project_manager',
-
     # Other
     'django.contrib.admin',
     'django.contrib.auth',
