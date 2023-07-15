@@ -54,7 +54,8 @@ class IndexView(ListView):
             context["total"] = sum(
                 [context["summary_per_month"].get(i)[0][2] for i in context["summary_per_month"]]
             )
-
+        except IndexError:
+            ...
+        finally:
             return context
-        except IndexError as e:
-            return e
+
