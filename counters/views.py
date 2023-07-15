@@ -50,10 +50,11 @@ class IndexView(ListView):
         context["summary_per_month"] = {
             obj: summary_per_month(obj.readings.all()) for obj in self.object_list
         }
-        context["total"] = sum(
-            [
-                context["summary_per_month"].get(i)[0][2]
-                for i in context["summary_per_month"]
-            ]
-        )
-        return context
+        try:
+            context["total"] = sum(
+                [context["summary_per_month"].get(i)[0][2] for i in context["summary_per_month"]]
+            )
+
+            return context
+        except IndexError as e:
+            return e
