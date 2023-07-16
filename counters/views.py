@@ -19,6 +19,7 @@ class CounterListView(ListView):
 class ReadingListView(ListView):
     model = Reading
     template_name = "counters/reading_list.html"
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
