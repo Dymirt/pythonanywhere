@@ -26,16 +26,6 @@ class AddCounterReading(CreateView):
     success_url = reverse_lazy("counters:readings-list")
 
 
-def update_usage(request):
-    counters = Counter.objects.all().filter(consumable=True)
-    for counter in counters:
-        readings = counter.readings.all()[:2]
-        latest = readings[0]
-        previous = readings[1]
-        latest.usage_in_units = latest.value - previous.value
-        latest.save(update_fields=["usage_in_units"])
-
-
 class SummaryView(ListView):
     model = Counter
     template_name = "counters/summary.html"

@@ -52,9 +52,7 @@ urlpatterns = [
         ),
         name="counter-delete",
     ),
-    path(
-        "counter/<int:pk>/detail/", CounterDetailView.as_view(), name="counter-detail"
-    ),
+    path("counter/<int:pk>/detail/", CounterDetailView.as_view(), name="counter-detail"),
     # Reading urls
     path("readings/list/", ReadingListView.as_view(), name="readings-list"),
     path("reading/create/", AddCounterReading.as_view(), name="reading-create"),
@@ -79,6 +77,4 @@ urlpatterns = [
         ),
         name="reading-delete",
     ),
-    # Update views
-    path("readings/update/usages", update_usage, name="update_readings_usages"),
 ]
