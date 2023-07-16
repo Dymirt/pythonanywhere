@@ -1,4 +1,7 @@
-<table border="1">
+<div class="card">
+    <div class="card-body">
+        {{ request.path }}
+<table class='table'>
     <thead>
         <tr>
             <th>Title</th>
@@ -12,7 +15,11 @@
         {% for obj in object_list %}
             <tr>
                 <td>
+                    {% if "detail" in request.path %}
+                    {{ obj.title }}
+                    {% else %}
                     <a href="{% url 'counters:counter-detail' obj.id %}">{{ obj.title }}</a>
+                    {% endif %}
                 </td>
                 <td>
                     {% if obj.price_per_unit %}{{ obj.price_per_unit }} zł{% endif %}
@@ -31,3 +38,5 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
+</div>

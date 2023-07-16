@@ -1,0 +1,13 @@
+{% extends "counters/dashboard.html" %}
+{% block data %}
+<div class="row justify-content-between">
+    {% for object in object_list %}
+
+    <div class="col-auto shadow rounded p-3">
+        {% include 'counters/partials/summary_per_month_table.html' %}
+    </div>
+
+    {% endfor %}
+</div>
+    <p>Total: {{ total|floatformat:2 }} zł</p>
+{% endblock %}

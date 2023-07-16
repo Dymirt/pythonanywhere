@@ -1,5 +1,5 @@
-{% extends "counters/base.html" %}
-{% block content %}
+{% extends "counters/dashboard.html" %}
+{% block data %}
     <h1>{{ object.title }}</h1>
     <p>Unit: {{ object.unit }}</p>
     <p>Price per {{ object.unit }}: {{ object.price_per_unit }}</p>

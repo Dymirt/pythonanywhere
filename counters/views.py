@@ -5,7 +5,6 @@ from django.views.generic import CreateView
 from counters.forms import ReadingForm
 
 from .models import Counter, Reading
-from .reports import summary_per_month
 
 
 class CounterListView(ListView):
@@ -14,15 +13,11 @@ class CounterListView(ListView):
 
 class ReadingListView(ListView):
     model = Reading
+    template_name = "counters/reading_list.html"
 
 
 class CounterDetailView(DetailView):
     model = Counter
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["summary"] = summary_per_month(self.object.readings.all())
-        return context
 
 
 class AddCounterReading(CreateView):
@@ -41,21 +36,7 @@ def update_usage(request):
         latest.save(update_fields=["usage_in_units"])
 
 
-class IndexView(ListView):
+class SummaryView(ListView):
     model = Counter
-    template_name = "counters/index.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["summary_per_month"] = {
-            obj: summary_per_month(obj.readings.all()) for obj in self.object_list
-        }
-        try:
-            context["total"] = sum(
-                [context["summary_per_month"].get(i)[0][2] for i in context["summary_per_month"]]
-            )
-        except IndexError:
-            ...
-        finally:
-            return context
+    template_name = "counters/summary.html"
 

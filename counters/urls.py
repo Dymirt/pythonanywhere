@@ -1,22 +1,22 @@
 from django.urls import path, reverse_lazy
 from django.views.generic import UpdateView, CreateView, DeleteView
-from .models import Counter, Reading
+from counters.models import Counter, Reading
 from django.contrib.auth.decorators import login_required
-from counters.views import AddCounterReading
 
-
-from .views import (
+from counters.views import (
     CounterListView,
     ReadingListView,
     CounterDetailView,
     update_usage,
-    IndexView,
+    SummaryView,
+    AddCounterReading,
 )
 
 app_name = "counters"
 
 urlpatterns = [
-    path("counters/", IndexView.as_view(), name="index"),
+    #path("counters/", SummaryView.as_view(), name="dashboard"),
+    path("counters/summary", SummaryView.as_view(), name="summary"),
     # Counters urls
     path("counters/list/", CounterListView.as_view(), name="counters-list"),
     path(
@@ -33,13 +33,11 @@ urlpatterns = [
     ),
     path(
         "counter/<int:pk>/edit/",
-        login_required(
-            UpdateView.as_view(
-                model=Counter,
-                fields="__all__",
-                success_url=reverse_lazy("counters:counters-list"),
-                template_name="counters/generic_update.html",
-            )
+        UpdateView.as_view(
+            model=Counter,
+            fields="__all__",
+            success_url=reverse_lazy("counters:counters-list"),
+            template_name="counters/generic_update.html",
         ),
         name="counter-edit",
     ),

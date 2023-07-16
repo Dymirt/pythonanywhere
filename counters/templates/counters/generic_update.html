@@ -1,5 +1,5 @@
-{% extends "counters/base.html" %}
-{% block content %}
+{% extends "counters/dashboard.html" %}
+{% block data %}
     <form method="post" action="">
         {% csrf_token %}
         {{ form.as_p }}

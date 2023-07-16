@@ -1,5 +1,8 @@
-{% extends "counters/base.html" %}
-{% block content %}
-    <a href="{% url 'counters:counter-create' %}" class='button'>add</a>
+{% extends "counters/dashboard.html" %}
+{% block data %}
+    <a href="{% url 'counters:counter-create' %}" class='button'>
+        <button type="button" class="btn btn-primary">Primary</button>
+    </a>
+
     {% include 'counters/partials/counters_table.html' %}
 {% endblock %}
