@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 
 
 class Counter(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="counters", blank=True, null=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="counters")
     title = models.CharField(max_length=60)
     consumable = models.BooleanField(default=True)
     unit = models.CharField(max_length=60, blank=True, null=True)
@@ -15,7 +15,7 @@ class Counter(models.Model):
     fixed_price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"{self.title}-{self.user}"
+        return f"{self.title}"
 
 
 class Reading(models.Model):
