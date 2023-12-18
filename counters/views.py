@@ -100,4 +100,6 @@ class ReadingUpdateView(UpdateView):
     def get_queryset(self):
         return Reading.objects.filter(counter__user=self.request.user)
 
+    
+
 
