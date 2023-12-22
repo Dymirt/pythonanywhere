@@ -1,7 +1,7 @@
-asgiref==3.5.0
-Django==4.1.10
-django-filter==21.1
-python-dotenv==0.20.0
-sqlparse==0.4.2
-django-isbn-field==0.5.3
-python-dotenv==1.0.0
+asgiref
+Django
+django-filter
+python-dotenv
+sqlparse
+django-isbn-field
+python-dotenv
