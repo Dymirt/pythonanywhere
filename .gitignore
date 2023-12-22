@@ -26,3 +26,4 @@ resume/__pycache__/
 mysite/__pycache__/*
 
 static/
+data.txt
