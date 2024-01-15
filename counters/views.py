@@ -245,7 +245,7 @@ def add_readings(request):
             Payment.objects.create(
                 counter=counter,
                 reading=latest_reading,
-                price=counter.prices.current(),
+                price=counter.prices.filter(date__lte=latest_reading.date).last(),
                 amount=calculate_reading_payment(latest_reading),
             )
 

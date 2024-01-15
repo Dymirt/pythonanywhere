@@ -58,9 +58,6 @@ class Price(models.Model):
     price_per_unit = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     price_per_month = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
-    def current(self):
-        return self.counter.prices.filter(date__lte=self.date).last()
-
     def __str__(self):
         return f"{self.price_per_unit}/{self.counter.unit} and {self.price_per_month}/month" if self.price_per_month else f"{self.price_per_unit}/{self.counter.unit}"
 
