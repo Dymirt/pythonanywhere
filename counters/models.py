@@ -58,6 +58,9 @@ class Price(models.Model):
     price_per_unit = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     price_per_month = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
+    def current(self):
+        return self.counter.prices.filter(date__lte=self.date).last()
+
 
 class Payment(models.Model):
     counter = models.ForeignKey(
