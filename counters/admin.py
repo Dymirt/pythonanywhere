@@ -22,5 +22,5 @@ class PersonAdmin(admin.ModelAdmin):
     list_display = (
         "counter",
         "reading",
-        "amount",
+        "reading_payment",
     )

@@ -21,6 +21,9 @@ from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.db.models.functions import ExtractMonth, ExtractYear
 
+from django.db.models import F, ExpressionWrapper, DecimalField
+
+
 from .forms import (
     ReadingForm,
     AddCounterForm,
@@ -118,16 +121,37 @@ class CounterDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         counter = context["object"]
+        # Calculate usage dynamically in the view
+        # Calculate usage dynamically in the view
         readings = (
-            Reading.objects.filter(counter=counter, usage__gt=0)
-            .annotate(month=ExtractMonth("date"))
-            .values("month", "usage")
+            Reading.objects.filter(counter=counter)
+            .annotate(
+                month=ExtractMonth("date"),
+                previous_value=Subquery(
+                    Reading.objects.filter(
+                        counter=OuterRef("counter"),
+                        date__lt=OuterRef("date"),
+                    )
+                    .order_by("-date")
+                    .values("value")[:1]
+                ),
+            )
+            .values("month", "value", "previous_value")
             .order_by("date")
         )
+
+        # Calculate usage based on value and previous_value
+        readings_usage = [
+            float(reading["value"] - reading["previous_value"])
+            if reading["previous_value"] is not None
+            else 0
+            for reading in readings
+        ]
+
         readings_month = [
             calendar.month_name[reading.get("month")] for reading in readings
         ]
-        readings_usage = [float(reading.get("usage")) for reading in readings]
+        #readings_usage = [float(reading.get("usage")) for reading in readings]
 
         context["readings_month"] = readings_month
         context["readings_usage"] = readings_usage
@@ -201,12 +225,45 @@ class SummaryView(ListView):
         if latest_reading_date:
             context["latest_reading_date"] = latest_reading_date.strftime("%Y-%m-%d")
         context["counter_form"] = AddCounterForm()
+
         context["payments_per_month"] = (
-            Reading.objects.filter(counter__user=self.request.user, usage__gt=0)
-            .annotate(month=ExtractMonth("date"), year=ExtractYear("date"))
+            Reading.objects.filter(counter__user=self.request.user)
+            .annotate(
+                month=ExtractMonth("date"),
+                year=ExtractYear("date"),
+                previous_value=Subquery(
+                    Reading.objects.filter(
+                        date__lt=OuterRef("date"),
+                        counter=OuterRef("counter"),
+                    ).order_by("-date").values("value")[:1]
+                ),
+                usage_in_units=ExpressionWrapper(
+                    F("value") - F("previous_value"),
+                    output_field=DecimalField(),
+                ),
+                price_per_unit=Subquery(
+                    Price.objects.filter(
+                        counter=OuterRef("counter"),
+                        date__lte=OuterRef("date"),
+                    ).order_by("-date").values("price_per_unit")[:1]
+                ),
+                price_per_month=Subquery(
+                    Price.objects.filter(
+                        counter=OuterRef("counter"),
+                        date__lte=OuterRef("date"),
+                    ).order_by("-date").values("price_per_month")[:1]
+                ),
+            )
             .values("month", "year")
-            .annotate(total_payment=Sum("payment__amount"))
-            .order_by("month")
+            .annotate(
+                total_payment=Sum(
+                    ExpressionWrapper(
+                        F("usage_in_units") * F("price_per_unit") + F("price_per_month"),
+                        output_field=DecimalField(),
+                    )
+                )
+            )
+            .order_by("-month")
         )
         return context
 
@@ -225,7 +282,7 @@ def add_readings(request):
             if counter.readings.exists() and counter.readings.count() > 1:
                 latest_reading = counter.readings.latest("pk")
 
-                # Return HttpResponseBadRequest if value of previous reading i greater then new value
+                # Return HttpResponseBadRequest if value of previous reading i greater than new value
                 if float(latest_reading.value) > float(request.POST.get(counter.title)):
                     return HttpResponseBadRequest()
 
@@ -246,24 +303,9 @@ def add_readings(request):
                 counter=counter,
                 reading=latest_reading,
                 price=counter.prices.filter(date__lte=latest_reading.date).last(),
-                amount=calculate_reading_payment(latest_reading),
             )
 
         return redirect(reverse_lazy("counters:dashboard"))
-
-
-def calculate_reading_payment(reading):
-    if reading.get_previous_reading():
-        if reading.usage_in_units():
-            total = reading.usage_in_units() * float(
-                reading.counter.prices.last().price_per_unit
-            )
-            return (
-                total + float(reading.counter.prices.last().price_per_month)
-                if reading.counter.prices.last().price_per_month
-                else total
-            )
-        return reading.counter.prices.last().price_per_month
 
 
 class CounterUpdateView(UpdateView):

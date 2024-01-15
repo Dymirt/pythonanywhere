@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from datetime import datetime
 
 
 class Counter(models.Model):
@@ -12,6 +13,9 @@ class Counter(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+    def current_price(self):
+        return self.prices.filter(date__lte=datetime.date(datetime.now())).last()
+
 
 class Reading(models.Model):
     class Meta:
@@ -22,16 +26,6 @@ class Reading(models.Model):
     )
     date = models.DateField()
     value = models.DecimalField(max_digits=10, decimal_places=2)
-    usage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-    def save(self, *args, **kwargs):
-        super(Reading, self).save(
-            *args, **kwargs
-        )  # Save the object first to get a valid pk
-        self.usage = self.usage_in_units()  # Now calculate the usage using the valid pk
-        super(Reading, self).save(
-            update_fields=["usage"]
-        )  # Save the object again with updated usage field
 
     def __str__(self):
         return f"{self.counter.title} {self.value} on {self.date}"
@@ -72,4 +66,17 @@ class Payment(models.Model):
     price = models.ForeignKey(
         "Price", related_name="payments", on_delete=models.CASCADE
     )
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+    def reading_payment(self):
+        if self.reading.get_previous_reading():
+            if self.reading.usage_in_units():
+                total = self.reading.usage_in_units() * float(
+                    self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_unit
+                )
+                return (
+                    total + float(self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month)
+                    if self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month
+                    else total
+                )
+            return self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month

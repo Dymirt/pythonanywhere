@@ -7,8 +7,8 @@
         {% with counter=object %}
         <h5 class="card-title">{{ counter.title }}</h5>
         <p>Unit: {{ counter.unit }}</p>
-        <p>Price per {{ counter.unit }}: {{ counter.prices.last.price_per_unit }}</p>
-        <p>Price per month: {{ counter.prices.last.price_per_month }}</p>
+        <p>Price per {{ counter.unit }}: {{ counter.current_price.price_per_unit }}</p>
+        <p>Price per month: {{ counter.current_price.price_per_month }}</p>
         <a href="{% url 'counters:counter-edit' counter.id %}">edit</a>
         <a href="{% url 'counters:counter-delete' counter.id %}">delete</a>
         <div class="row my-5">

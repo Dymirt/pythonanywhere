@@ -10,6 +10,7 @@
                 <th>Value</th>
                 <th>Usage</th>
                 <th>Payment</th>
+                <th>Price</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -20,14 +21,16 @@
                 <td>{{ reading.value }} {{ reading.counter.unit }}</td>
 
                 {% if reading %}
-                <td>{{ reading.usage|floatformat:2 }} {{ counter.unit }}</td>
+                <td>{{ reading.usage_in_units|floatformat:2 }} {{ counter.unit }}</td>
                 {% else %}
                 <td>-</td>
                 {% endif %}
 
                 {% if reading.payment %}
-                <td>{{ reading.payment.amount|floatformat:2 }} zł</td>
+                <td>{{ reading.payment.reading_payment|floatformat:2 }} zł</td>
+                <td>{{ reading.payment.price }}</td>
                 {% else %}
+                <td>-</td>
                 <td>-</td>
                 {% endif %}
                 <td>
