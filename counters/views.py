@@ -1,5 +1,4 @@
 import calendar
-import json
 from datetime import datetime
 
 from django.db import IntegrityError
@@ -9,23 +8,14 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import (
-    HttpResponse,
     HttpResponseRedirect,
-    JsonResponse,
-    HttpResponseForbidden,
     HttpResponseBadRequest,
 )
-from django.core.serializers import serialize
 from django.contrib.auth import get_user_model
 
-from django.db.models import Sum
 from django.db.models.functions import ExtractMonth, ExtractYear
 
-from django.db.models import F, ExpressionWrapper, DecimalField
-
-
 from .forms import (
-    ReadingForm,
     AddCounterForm,
     AddCounterPriceForm,
     AddCounterReadingForm,
@@ -33,7 +23,7 @@ from .forms import (
 )
 from .models import Counter, Reading, Price, Payment
 
-from django.db.models import OuterRef, Subquery, Max
+from django.db.models import OuterRef, Subquery, Max, F, ExpressionWrapper, DecimalField, Sum
 
 
 def index_view(request):

@@ -67,16 +67,14 @@ class Payment(models.Model):
         "Price", related_name="payments", on_delete=models.CASCADE
     )
 
-
     def reading_payment(self):
         if self.reading.get_previous_reading():
             if self.reading.usage_in_units():
                 total = self.reading.usage_in_units() * float(
                     self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_unit
                 )
-                return (
+                return round(
                     total + float(self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month)
                     if self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month
-                    else total
-                )
+                    else total, 2)
             return self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month
