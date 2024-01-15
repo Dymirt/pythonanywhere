@@ -61,6 +61,9 @@ class Price(models.Model):
     def current(self):
         return self.counter.prices.filter(date__lte=self.date).last()
 
+    def __str__(self):
+        return f"{self.price_per_unit}/{self.counter.unit} and {self.price_per_month}/month" if self.price_per_month else f"{self.price_per_unit}/{self.counter.unit}"
+
 
 class Payment(models.Model):
     counter = models.ForeignKey(
