@@ -1,49 +1,50 @@
 from django.urls import path, reverse_lazy
-from django.views.generic import UpdateView, CreateView, DeleteView
-from counters.models import Counter, Reading
+from django.views.generic import DeleteView
+from .models import Counter, Reading
 from django.contrib.auth.decorators import login_required
 
-from counters.views import (
-    CounterListView,
-    ReadingListView,
+from .views import (
     CounterDetailView,
     SummaryView,
-    AddCounterReading,
     AddCounter,
     CounterUpdateView,
-    ReadingUpdateView,
+    login_view,
+    logout_view,
+    register,
+    index_view,
+    add_readings,
 )
 
 app_name = "counters"
 
 urlpatterns = [
-    # path("counters/", SummaryView.as_view(), name="dashboard"),
-    path("counters/summary", SummaryView.as_view(), name="summary"),
+    # User
+    path("", index_view, name="index"),
+    path("login", login_view, name="login"),
+    path("logout", logout_view, name="logout"),
+    path("register", register, name="register"),
+    path("dashboard/", SummaryView.as_view(), name="dashboard"),
     # Counters urls
-    path("counters/list/", CounterListView.as_view(), name="counters-list"),
-    path("counter/create/", AddCounter.as_view(), name="counter-create"),
-    path("counter/<int:pk>/edit/", CounterUpdateView.as_view(), name="counter-edit"),
+    path("counter/<int:pk>", CounterDetailView.as_view(), name="counter-detail"),
+    path("counter/add", AddCounter.as_view(), name="counter-add"),
+    path("counter/<int:pk>/edit", CounterUpdateView.as_view(), name="counter-edit"),
     path(
         "counter/<int:pk>/delete/",
         DeleteView.as_view(
             model=Counter,
-            success_url=reverse_lazy("counters:counters-list"),
+            success_url=reverse_lazy("counters:dashboard"),
             template_name="counters/generic_delete.html",
-        )
-        ,
+        ),
         name="counter-delete",
     ),
-    path("counter/<int:pk>/detail/", CounterDetailView.as_view(), name="counter-detail"),
     # Reading urls
-    path("readings/list/", ReadingListView.as_view(), name="readings-list"),
-    path("reading/create/", AddCounterReading.as_view(), name="reading-create"),
-    path("reading/<int:pk>/edit/", ReadingUpdateView.as_view(), name="reading-edit"),
+    path("readings/add", add_readings, name="readings-add"),
     path(
         "reading/<int:pk>/delete/",
         login_required(
             DeleteView.as_view(
                 model=Reading,
-                success_url=reverse_lazy("counters:readings-list"),
+                success_url=reverse_lazy("counters:dashboard"),
                 template_name="counters/generic_delete.html",
             )
         ),

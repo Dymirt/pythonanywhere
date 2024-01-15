@@ -1,12 +1,43 @@
 {% extends "counters/dashboard.html" %}
+{% load custom_tags %}
 {% block data %}
-<div class="row justify-content-between">
-    {% for object in object_list %}
-
-    <div class="col-auto shadow rounded ">
-        {% include 'counters/partials/summary_per_month_table.html' %}
+{% with counters=object_list%}
+<div class="row m-2 g-2">
+    {% if counters %}
+    <div class="col-sm-12 col-lg-6">
+        <div class="card border-0 shadow rounded">
+            <div class="card-body">
+                <h5 class="card-title">Latest Payments</h5>
+                <table class="table">
+                    <tbody>
+                    {% for data in payments_per_month %}
+                    <tr scope="col">
+                        <th scope="col">{{ data.year }}</th>
+                        <th scope="col">{{ data.month|month_name }}</th>
+                        <td scope="col">{{ data.total_payment|floatformat:2 }}zł</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% include 'counters/partials/readings_add_modal.html' %}
+                </div>
+            </div>
+        </div>
     </div>
-
-    {% endfor %}
+    {% endif %}
+    <div class="col-sm-12 col-lg-6">
+        <div class="card border-0 shadow rounded">
+            <div class="card-body">
+                {% include 'counters/partials/counters_table.html' %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" onclick="location.href='{% url 'counters:counter-add' %}';"
+                            class="btn btn-primary">Add Counter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{% endwith %}
 {% endblock %}
