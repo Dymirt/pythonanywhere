@@ -253,7 +253,7 @@ class SummaryView(ListView):
                     )
                 )
             )
-            .order_by("-month")
+            .order_by("-year", "-month")
         )
         return context
 
