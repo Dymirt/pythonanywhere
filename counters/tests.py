@@ -33,6 +33,6 @@ class ReadingModelTest(TestCase):
         self.assertEqual(self.reading2.get_previous_reading(), self.reading1)
 
     def test_usage_in_units(self):
-        self.assertEqual(self.reading.usage, 0)
-        self.assertEqual(self.reading1.usage, 10)
-        self.assertEqual(self.reading2.usage, 20)
+        self.assertEqual(self.reading.usage_in_units(), 0)
+        self.assertEqual(self.reading1.usage_in_units(), 10)
+        self.assertEqual(self.reading2.usage_in_units(), 20)
