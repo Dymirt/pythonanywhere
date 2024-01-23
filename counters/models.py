@@ -78,3 +78,6 @@ class Payment(models.Model):
                     if self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month
                     else total, 2)
             return self.reading.counter.prices.filter(date__lte=self.reading.date).last().price_per_month
+
+    def get_payment_price(self):
+        return self.reading.counter.prices.filter(date__lte=self.reading.date).last()

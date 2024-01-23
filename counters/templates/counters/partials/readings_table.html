@@ -28,7 +28,7 @@
 
                 {% if reading.payment %}
                 <td>{{ reading.payment.reading_payment|floatformat:2 }} zł</td>
-                <td>{{ reading.payment.price }}</td>
+                <td>{{ reading.payment.get_payment_price }}</td>
                 {% else %}
                 <td>-</td>
                 <td>-</td>
